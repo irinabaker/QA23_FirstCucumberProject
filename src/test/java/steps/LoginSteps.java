@@ -34,13 +34,12 @@ public class LoginSteps {
     @Then("Appear Login Registration form")
     public void isLoginRegistrationFormPresent() {
         Assert.assertTrue(isElementPresent(By.cssSelector(".login_login__3EHKB")));
-        driver.quit();
     }
 
     @And("Enter valid data")
     public void enterValidData() {
-        type(By.cssSelector("[placeholder='Email']"),"karl+1@gmail.com");
-        type(By.cssSelector("[placeholder='Password']"),"Ka1234567$");
+        type(By.cssSelector("[placeholder='Email']"), "karl@gmail.com");
+        type(By.cssSelector("[placeholder='Password']"), "Ka1234567$");
     }
 
     @And("Click on Login button")
@@ -52,30 +51,54 @@ public class LoginSteps {
     public void isSignOutButtonDisplayed() {
         pause(2000);
         Assert.assertTrue(isElementPresent(By.xpath("//button[.='Sign Out']")));
-        driver.quit();
     }
 
     @And("Enter a valid email and an invalid password")
     public void enterValidEmailAndInvalidPassword(DataTable table) {
 
-        List<Map<String,String>> dataTable = table.asMaps();
+        List<Map<String, String>> dataTable = table.asMaps();
         String email = dataTable.get(0).get("email");
         String password = dataTable.get(0).get("password");
 
-        type(By.cssSelector("[placeholder='Email']"),email);
-        type(By.cssSelector("[placeholder='Password']"),password);
+        type(By.cssSelector("[placeholder='Email']"), email);
+        type(By.cssSelector("[placeholder='Password']"), password);
     }
 
     @Then("Alert appeared")
     public void isAlertDisplayed() {
         pause(2000);
         Assert.assertTrue(isAlertPresent());
+    }
+
+    @And("Message Login Failed with code 400 appeared")
+    public void isMessageDisplayed() {
+        Assert.assertTrue(isElementPresent(By.cssSelector(".login_login__3EHKB > div")));
+    }
+
+    @And("Enter an invalid email and a valid password")
+    public void enterInvalidEmailAndValidPassword(DataTable table) {
+
+        List<Map<String, String>> dataTable = table.asMaps();
+        String email = dataTable.get(0).get("email");
+        String password = dataTable.get(0).get("password");
+
+        type(By.cssSelector("[placeholder='Email']"), email);
+        type(By.cssSelector("[placeholder='Password']"), password);
+    }
+
+    @And("Click on Registration button")
+    public void clickOnRegistrationButton() {
+        click(By.xpath("//button[.=' Registration']"));
+    }
+
+    @And("Browser closed")
+    public void tearDown() {
         driver.quit();
     }
 
     private boolean isAlertPresent() {
-        Alert alert = new WebDriverWait(driver,10).until((ExpectedConditions.alertIsPresent()));
-        if(alert == null) {
+        Alert alert = new WebDriverWait(driver, 10).until((ExpectedConditions.alertIsPresent()));
+        if (alert == null) {
             return false;
         } else {
             driver.switchTo().alert();
@@ -101,7 +124,7 @@ public class LoginSteps {
     }
 
     private boolean isElementPresent(By locator) {
-        return driver.findElements(locator).size()>0;
+        return driver.findElements(locator).size() > 0;
     }
 
     private void click(By locator) {
